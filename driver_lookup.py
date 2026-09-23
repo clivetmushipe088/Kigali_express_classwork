@@ -124,7 +124,7 @@ def main():
     print("Drivers in the system:", len(drivers))
     print("Example driver:", drivers[0])
 
-    # --- setup costs (these happen once) ---
+    # setup costs (these happen once) 
     sort_time = timeit.timeit(lambda: sort_drivers(drivers), number=10) / 10
     build_time = timeit.timeit(lambda: build_driver_map(drivers), number=10) / 10
 
@@ -134,7 +134,7 @@ def main():
     print("\nSorted list ready. Time to sort once: {:.2f} ms".format(sort_time * 1000))
     print("Dictionary built. Time to build once: {:.2f} ms".format(build_time * 1000))
 
-    # --- all three must agree before we time anything ---
+    # all three must agree before we time anything
     test_ids = [1000, 3500, 7777, 10999, 99999]
     for test_id in test_ids:
         found = find_driver_slow(drivers, test_id)
@@ -142,7 +142,7 @@ def main():
         assert find_driver_fast(driver_map, test_id) == found
     print("Correctness check: all three methods agree. OK")
 
-    # --- how many drivers does each method check? ---
+    # how many drivers does each method check? 
     last_id = drivers[-1]["id"]
     middle_id = drivers[len(drivers) // 2]["id"]
 
@@ -160,7 +160,7 @@ def main():
         count_steps_binary(sorted_drivers, last_id)))
     print("{:<18}{:>12}{:>12}".format("HashMap", 1, 1))
 
-    # --- the timings ---
+    # the timing
     # The same 1000 random customer requests for all three methods.
     requests = [random.choice(drivers)["id"] for _ in range(1000)]
 
@@ -183,7 +183,7 @@ def main():
     binary_each = timeit.timeit(run_binary, number=runs) / runs / len(requests)
     fast_each = timeit.timeit(run_fast, number=runs) / runs / len(requests)
 
-    # --- results ---
+    # results
     rows = [
         ("Linear Search", "O(N)", "-", slow_each),
         ("Binary Search", "O(log N)", "{:.2f} ms (sort)".format(sort_time * 1000), binary_each),
@@ -203,7 +203,7 @@ def main():
 
     print("-" * 66)
 
-    # --- when does building the dictionary pay for itself? ---
+    # when does building the dictionary pay for itself?
     saved_per_lookup = slow_each - fast_each
     break_even = build_time / saved_per_lookup
 

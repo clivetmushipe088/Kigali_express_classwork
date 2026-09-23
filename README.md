@@ -12,15 +12,6 @@ Our fix was to convert the list into a dictionary where the keys are driver IDs.
 python3 driver_lookup.py
 ```
 
-No installation needed, standard library only. Tested on Python 3.14.
-
-## Files
-
-```
-driver_lookup.py    all three search methods and the benchmark
-drivers.json        the 10,000 sample drivers
-```
-
 `drivers.json` is the raw list we convert. Keep it next to the script, the program stops with a message if it is missing.
 
 ## Search methods
@@ -61,15 +52,3 @@ def find_driver_fast(driver_map, driver_id):
 | Binary Search | ~0.4 ms (sort) | ~1.0 µs | ~94x |
 | HashMap | ~0.3 ms (build) | ~0.06 µs | ~1,500x |
 
-Building the dictionary takes about 0.3 ms and only happens once. It pays for itself after about 3 lookups. Timings will vary from one computer to another.
-
-## Notes
-
-- Our driver IDs are already in order in the file, so the sort is faster than it would normally be. On shuffled data the sort takes longer, but the per-lookup times stay about the same.
-- Binary search needs the list sorted and kept sorted. Adding a driver means inserting it in the right place, not just appending.
-- The dictionary has to be updated whenever a driver is added or removed, otherwise it goes stale:
-  ```python
-  drivers.append(new_driver)
-  driver_map[new_driver["id"]] = new_driver
-  ```
-- `find_driver_fast` uses `.get()` so an unknown ID returns `None` instead of raising `KeyError`.
